@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="./assets/vendor/gsap.min.js"></script>
+    <style>
+      :root {
+        --bg: #000000;
+        --surface: #111111;
+        --fg: #FFFFFF;
+        --muted: #999999;
+        --primary: #F5C400;
+        --accent: #F5C400;
+        --contrast: #000000;
+        --font-display: Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+        --font-body: Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+        --display-weight: 800;
+        --tracking: -0.02em;
+      }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; background: #000; }
+      #root {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: #000;
+        color: #fff;
+        font-family: var(--font-body);
+        -webkit-font-smoothing: antialiased;
+      }
+      #progress {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        height: 6px;
+        width: 100%;
+        background: #F5C400;
+        transform-origin: left center;
+        z-index: 50;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="22"
+      data-width="1920"
+      data-height="1080"
+      data-fps="30"
+    >
+      <div id="opening-host" data-composition-id="opening" data-composition-src="compositions/opening.html"
+           data-start="0" data-duration="5.5" data-width="1920" data-height="1080"></div>
+      <div id="message-host" data-composition-id="message" data-composition-src="compositions/message.html"
+           data-start="5.5" data-duration="5.5" data-width="1920" data-height="1080"></div>
+      <div id="stat-host" data-composition-id="stat" data-composition-src="compositions/stat.html"
+           data-start="11" data-duration="4.5" data-width="1920" data-height="1080"></div>
+      <div id="close-host" data-composition-id="close" data-composition-src="compositions/close.html"
+           data-start="15.5" data-duration="6.5" data-width="1920" data-height="1080"></div>
+      <div id="progress"></div>
+
+      <!-- Audio bed: music + voiceover + SFX. HyperFrames mixes these on render. -->
+      <audio id="a-music" src="assets/audio/music.wav" data-start="0" data-duration="22"
+             data-track-index="0" data-volume="0.16" data-fade-in="1.0" data-fade-out="2.5"></audio>
+
+      <audio id="a-vo1" src="assets/audio/vo-1.mp3" data-start="0.6" data-duration="4.31"
+             data-track-index="1" data-volume="1.0" data-fade-in="0.05" data-fade-out="0.12"></audio>
+      <audio id="a-vo2" src="assets/audio/vo-2.mp3" data-start="5.8" data-duration="5.84"
+             data-track-index="1" data-volume="1.0" data-fade-in="0.05" data-fade-out="0.12"></audio>
+      <audio id="a-vo3" src="assets/audio/vo-3.mp3" data-start="11.9" data-duration="3.67"
+             data-track-index="1" data-volume="1.0" data-fade-in="0.05" data-fade-out="0.12"></audio>
+      <audio id="a-vo4" src="assets/audio/vo-4.mp3" data-start="16.2" data-duration="4.13"
+             data-track-index="1" data-volume="1.0" data-fade-in="0.05" data-fade-out="0.12"></audio>
+
+      <audio id="a-ambi" src="assets/audio/ambi-coffee.wav" data-start="0" data-duration="5.12"
+             data-track-index="2" data-volume="0.5" data-fade-in="0.6" data-fade-out="1.2"></audio>
+
+      <audio id="a-whoosh1" src="assets/audio/ui-whoosh.wav" data-start="5.05" data-duration="0.85"
+             data-track-index="5" data-volume="0.55"></audio>
+      <audio id="a-whoosh2" src="assets/audio/ui-whoosh.wav" data-start="10.55" data-duration="0.85"
+             data-track-index="3" data-volume="0.55"></audio>
+      <audio id="a-whoosh3" src="assets/audio/ui-whoosh.wav" data-start="15.05" data-duration="0.85"
+             data-track-index="3" data-volume="0.55"></audio>
+
+      <audio id="a-pop1" src="assets/audio/ui-pop.wav" data-start="0.15" data-duration="0.18"
+             data-track-index="4" data-volume="0.4"></audio>
+      <audio id="a-pop2" src="assets/audio/ui-pop.wav" data-start="12.52" data-duration="0.18"
+             data-track-index="4" data-volume="0.35"></audio>
+      <audio id="a-pop3" src="assets/audio/ui-pop.wav" data-start="15.56" data-duration="0.18"
+             data-track-index="4" data-volume="0.4"></audio>
+
+      <audio id="a-chime1" src="assets/audio/ui-chime.wav" data-start="0.8" data-duration="1.8"
+             data-track-index="3" data-volume="0.3"></audio>
+      <audio id="a-chime2" src="assets/audio/ui-chime.wav" data-start="16.35" data-duration="1.8"
+             data-track-index="5" data-volume="0.45"></audio>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      (function () {
+        const tl = gsap.timeline({ paused: true });
+        tl.fromTo("#progress", { scaleX: 0 }, { scaleX: 1, duration: 22, ease: "none" }, 0);
+        window.__timelines.main = tl;
+      })();
+    </script>
+  </body>
+</html>

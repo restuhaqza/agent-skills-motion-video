@@ -1,0 +1,32 @@
+<template>
+  <style>
+    #message-root { position: absolute; inset: 0; overflow: hidden; background: #000; }
+    #message-phrase { position: absolute; inset: 0; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 10px; }
+    .message-line { font-family: var(--font-display); font-weight: 700; font-size: 84px;
+      letter-spacing: -.02em; color: #fff; line-height: 1.1; }
+    .message-y { color: #F5C400; }
+  </style>
+
+  <div id="message-root" data-composition-id="message" data-width="1920" data-height="1080">
+    <div id="message-phrase">
+      <div id="message-l1" class="message-line">Learn <span class="message-y">together.</span></div>
+      <div id="message-l2" class="message-line">Build <span class="message-y">side projects.</span></div>
+      <div id="message-l3" class="message-line">Grow your <span class="message-y">career.</span></div>
+      <div id="message-l4" class="message-line">All over <span class="message-y">good coffee.</span></div>
+    </div>
+  </div>
+
+  <script>
+    window.__timelines = window.__timelines || {};
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo("#message-l1", { y: 54, opacity: 0 }, { y: 0, opacity: 1, duration: .55, ease: "power3.out" }, 0);
+      tl.fromTo("#message-l2", { y: 54, opacity: 0 }, { y: 0, opacity: 1, duration: .55, ease: "power3.out" }, .7);
+      tl.fromTo("#message-l3", { y: 54, opacity: 0 }, { y: 0, opacity: 1, duration: .55, ease: "power3.out" }, 1.4);
+      tl.fromTo("#message-l4", { y: 54, opacity: 0 }, { y: 0, opacity: 1, duration: .55, ease: "power3.out" }, 2.1);
+      tl.to("#message-root", { opacity: 0, duration: .4, ease: "power2.in" }, 5.1);
+      window.__timelines.message = tl;
+    })();
+  </script>
+</template>

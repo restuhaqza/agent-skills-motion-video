@@ -1,0 +1,22 @@
+{
+  "name": "Vibe From Cafe",
+  "colors": {
+    "bg": "#000000",
+    "surface": "#111111",
+    "fg": "#FFFFFF",
+    "muted": "#999999",
+    "primary": "#F5C400",
+    "accent": "#F5C400",
+    "contrast": "#000000",
+    "border": "#222222"
+  },
+  "fonts": {
+    "display": "Inter, system-ui, sans-serif",
+    "body": "Inter, system-ui, sans-serif",
+    "displayWeight": 800,
+    "tracking": "-0.02em"
+  },
+  "logo": { "src": "assets/logo.jpg", "alt": "Vibe From Cafe" },
+  "motion": { "personality": "confident", "energy": 0.65 },
+  "notes": "Dark ground, yellow #F5C400 accent, Inter. The logo is black+yellow on a white background, so it is presented on a white plate rather than knocked out."
+}

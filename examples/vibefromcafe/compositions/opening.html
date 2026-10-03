@@ -1,0 +1,42 @@
+<template>
+  <style>
+    #opening-root { position: absolute; inset: 0; overflow: hidden; background: #000; color: #fff; font-family: var(--font-body); }
+    #opening-glow { position: absolute; inset: 0;
+      background: radial-gradient(58% 50% at 50% 44%, rgba(245,196,0,.16), rgba(0,0,0,0) 62%); }
+    #opening-stack { position: absolute; inset: 0; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 24px; }
+    #opening-plate { width: 230px; height: 230px; border-radius: 46px; background: #fff;
+      display: grid; place-items: center; box-shadow: 0 30px 90px rgba(0,0,0,.6); }
+    #opening-logo { width: 200px; height: 200px; display: block; }
+    #opening-eyebrow { font-family: var(--font-body); font-weight: 600; font-size: 23px;
+      letter-spacing: .34em; color: #F5C400; text-transform: uppercase; }
+    #opening-title { font-family: var(--font-display); font-weight: 800; font-size: 130px;
+      letter-spacing: -.03em; line-height: 1; margin: 0; }
+    #opening-support { font-family: var(--font-body); font-weight: 400; font-size: 37px;
+      color: #999; margin: 0; }
+  </style>
+
+  <div id="opening-root" data-composition-id="opening" data-width="1920" data-height="1080">
+    <div id="opening-glow"></div>
+    <div id="opening-stack">
+      <div id="opening-plate"><img id="opening-logo" src="assets/logo.jpg" alt="Vibe From Cafe" /></div>
+      <div id="opening-eyebrow">A community for tech workers</div>
+      <h1 id="opening-title">Vibe From Cafe</h1>
+      <p id="opening-support">Navigate the AI shift — together.</p>
+    </div>
+  </div>
+
+  <script>
+    window.__timelines = window.__timelines || {};
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo("#opening-glow", { opacity: 0 }, { opacity: 1, duration: 1.2, ease: "power2.out" }, 0);
+      tl.fromTo("#opening-plate", { y: 30, scale: .9, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: .7, ease: "power3.out" }, .15);
+      tl.fromTo("#opening-eyebrow", { y: 16, opacity: 0 }, { y: 0, opacity: 1, duration: .5, ease: "power3.out" }, .5);
+      tl.fromTo("#opening-title", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: .7, ease: "power3.out" }, .7);
+      tl.fromTo("#opening-support", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: .55, ease: "power3.out" }, 1.0);
+      tl.to("#opening-stack", { opacity: 0, duration: .45, ease: "power2.in" }, 4.95);
+      window.__timelines.opening = tl;
+    })();
+  </script>
+</template>

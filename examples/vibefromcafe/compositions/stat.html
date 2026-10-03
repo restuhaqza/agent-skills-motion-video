@@ -1,0 +1,44 @@
+<template>
+  <style>
+    #stat-root { position: absolute; inset: 0; overflow: hidden; background: #000; }
+    #stat-wrap { position: absolute; inset: 0; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 34px; }
+    #stat-label { font-family: var(--font-body); font-weight: 600; font-size: 26px; line-height: 1;
+      letter-spacing: .3em; text-transform: uppercase; color: #F5C400; }
+    #stat-row { display: flex; align-items: baseline; gap: 16px; line-height: 1; }
+    #stat-value { font-family: var(--font-display); font-weight: 800; font-size: 220px;
+      line-height: .9; letter-spacing: -.04em; font-variant-numeric: tabular-nums; color: #fff; }
+    #stat-suffix { font-family: var(--font-display); font-weight: 600; font-size: 96px;
+      line-height: .9; letter-spacing: -.02em; color: #999; }
+    #stat-rule { position: relative; width: 560px; height: 6px; background: #222;
+      border-radius: 99px; overflow: hidden; }
+    #stat-fill { position: absolute; inset: 0; background: #F5C400; transform-origin: left center; }
+    #stat-context { font-family: var(--font-body); font-size: 30px; line-height: 1; color: #999; }
+  </style>
+
+  <div id="stat-root" data-composition-id="stat" data-width="1920" data-height="1080">
+    <div id="stat-wrap">
+      <div id="stat-label">Community café map</div>
+      <div id="stat-row"><span id="stat-value">0</span><span id="stat-suffix">cafés</span></div>
+      <div id="stat-rule"><div id="stat-fill"></div></div>
+      <div id="stat-context">mapped in the Jogja chapter</div>
+    </div>
+  </div>
+
+  <script>
+    window.__timelines = window.__timelines || {};
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+      const target = 66;
+      const obj = { n: 0 };
+      tl.fromTo("#stat-label", { y: 14, opacity: 0 }, { y: 0, opacity: 1, duration: .4, ease: "power3.out" }, 0);
+      tl.to(obj, { n: target, duration: 1.2, ease: "power2.out",
+        onUpdate: function () { document.getElementById("stat-value").textContent = Math.round(obj.n).toLocaleString("en-US"); } }, .35);
+      tl.fromTo("#stat-fill", { scaleX: 0 }, { scaleX: 1, duration: 1.2, ease: "power2.out" }, .35);
+      tl.fromTo("#stat-suffix", { opacity: 0 }, { opacity: 1, duration: .3, ease: "power2.out" }, 1.45);
+      tl.fromTo("#stat-context", { y: 14, opacity: 0 }, { y: 0, opacity: 1, duration: .45, ease: "power3.out" }, 1.6);
+      tl.to("#stat-root", { opacity: 0, duration: .35, ease: "power2.in" }, 4.1);
+      window.__timelines.stat = tl;
+    })();
+  </script>
+</template>
