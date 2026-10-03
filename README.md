@@ -1,6 +1,6 @@
-# promo-motion
+# agent-skills-motion-video
 
-Branded promotional motion graphics for AI coding agents.
+Branded promotional motion graphics for AI coding agents — the `promo-motion` skill.
 
 Give an agent a brief. It writes HTML/CSS/GSAP. HyperFrames renders a
 **deterministic** MP4, or a transparent WebM/ProRes overlay you can drop on
