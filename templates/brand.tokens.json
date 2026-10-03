@@ -1,0 +1,21 @@
+{
+  "name": "Acme",
+  "colors": {
+    "bg": "#0B0B0E",
+    "surface": "#15151A",
+    "fg": "#F5F5F7",
+    "muted": "#9A9AA5",
+    "primary": "#FF5A1F",
+    "accent": "#FFB020",
+    "contrast": "#FFFFFF"
+  },
+  "fonts": {
+    "display": "\"Space Grotesk\", system-ui, sans-serif",
+    "body": "\"Inter\", system-ui, sans-serif",
+    "displayWeight": 800,
+    "tracking": "-0.02em"
+  },
+  "logo": { "src": "assets/logo.svg", "alt": "Acme" },
+  "motion": { "personality": "confident", "energy": 0.6 },
+  "notes": "Bold geometric sans, warm orange accent on near-black."
+}

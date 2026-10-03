@@ -1,0 +1,11 @@
+node_modules/
+.DS_Store
+renders/
+*.mp4
+*.mov
+*.webm
+*.gif
+!examples/**/*.gif
+sheet*.png
+*.log
+.env

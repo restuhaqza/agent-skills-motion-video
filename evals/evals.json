@@ -1,0 +1,26 @@
+{
+  "skill_name": "promo-motion",
+  "evals": [
+    {
+      "id": 0,
+      "name": "logo-sting-northwind",
+      "prompt": "Can you make a 3-second animated logo sting for my company Northwind? Our colors are navy #0A1F44 and gold #F2B705, and the mark should read NORTHWIND. I need it as a transparent overlay for OBS and also an MP4 for YouTube intros.",
+      "expected_output": "A HyperFrames project rendering a 3s 1920x1080 logo sting in brand navy/gold with the exact wordmark NORTHWIND; a transparent WebM (or ProRes MOV) overlay plus an MP4. Lint and check pass.",
+      "files": []
+    },
+    {
+      "id": 1,
+      "name": "stat-hit-reels",
+      "prompt": "I need a count-up stat graphic for a pitch deck: '2,400 stores' with the label 'NOW SERVING' and context 'up from 1,900 last year'. Make it vertical 9:16 for Instagram Reels, about 4 seconds. Use a clean minimal look.",
+      "expected_output": "A 1080x1920, ~4s stat-hit that counts up to exactly 2,400, shows label NOW SERVING and context 'up from 1,900 last year', rendered as MP4. Lint and check pass.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "lower-third-helios",
+      "prompt": "Make a lower third for an interview with Dr. Lena Ortiz, VP of Engineering at Helios. Brand is minimal black and white with a teal accent #14B8A6. It should sit over footage at the bottom left and be a transparent overlay I can drop into Premiere.",
+      "expected_output": "A transparent lower-third overlay (WebM or ProRes MOV) with exact name 'Dr. Lena Ortiz' and role 'VP of Engineering at Helios', teal accent, positioned lower-left, clean first/last frames. Lint and check pass.",
+      "files": []
+    }
+  ]
+}

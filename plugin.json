@@ -1,0 +1,9 @@
+{
+  "name": "promo-motion",
+  "version": "0.1.0",
+  "description": "Branded promotional motion graphics with HyperFrames: logo stings, lower thirds, title cards, stat hits, kinetic type, and transitions.",
+  "license": "MIT",
+  "homepage": "https://hyperframes.heygen.com",
+  "keywords": ["video", "motion-graphics", "promo", "hyperframes", "agent-skill"],
+  "skills": ["./"]
+}
