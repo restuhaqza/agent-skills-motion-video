@@ -9,3 +9,16 @@ renders/
 sheet*.png
 *.log
 .env
+
+# Example binary assets are not committed:
+#  - brand logos belong to their owners
+#  - generated audio is large (and model licenses vary)
+#  - vendored libraries are fetched on demand
+# Regenerate them locally; see examples/vibefromcafe/README.md
+examples/**/assets/audio/
+examples/**/assets/vendor/
+examples/**/assets/logo.jpg
+examples/**/assets/logo.png
+examples/**/assets/logo.svg
+*.wav
+*.mp3
