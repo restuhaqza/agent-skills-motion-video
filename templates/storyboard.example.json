@@ -1,0 +1,60 @@
+{
+  "name": "roast-promo",
+  "aspect": "16:9",
+  "fps": 30,
+  "overlay": false,
+  "logo": "assets/logo.svg",
+  "brand": {
+    "name": "Roast",
+    "colors": {
+      "bg": "#14100D",
+      "surface": "#1F1913",
+      "fg": "#F7F1E8",
+      "muted": "#A99A88",
+      "primary": "#E4572E",
+      "accent": "#F3A712",
+      "contrast": "#FFFFFF"
+    },
+    "fonts": {
+      "display": "\"Space Grotesk\", system-ui, sans-serif",
+      "body": "\"Inter\", system-ui, sans-serif",
+      "displayWeight": 800,
+      "tracking": "-0.02em"
+    },
+    "motion": { "personality": "confident", "energy": 0.6 }
+  },
+  "scenes": [
+    {
+      "id": "opening",
+      "archetype": "title-card",
+      "duration": 5,
+      "eyebrow": "Introducing",
+      "title": "Roast",
+      "message": "Fresh roasted, delivered weekly."
+    },
+    {
+      "id": "message",
+      "archetype": "kinetic-type",
+      "duration": 6,
+      "l1": "Fresh roasted.",
+      "l2": "Delivered",
+      "accent-word": "weekly.",
+      "l3": "Never stale."
+    },
+    {
+      "id": "stat",
+      "archetype": "stat-hit",
+      "duration": 4.5,
+      "label": "Brewing since 2019",
+      "value": 12000,
+      "suffix": "",
+      "context": "12,000 subscribers and counting"
+    },
+    {
+      "id": "close",
+      "archetype": "logo-sting",
+      "duration": 4.5,
+      "title": "Roast"
+    }
+  ]
+}
