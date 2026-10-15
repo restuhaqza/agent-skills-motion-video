@@ -21,6 +21,13 @@
       "prompt": "Make a lower third for an interview with Dr. Lena Ortiz, VP of Engineering at Helios. Brand is minimal black and white with a teal accent #14B8A6. It should sit over footage at the bottom left and be a transparent overlay I can drop into Premiere.",
       "expected_output": "A transparent lower-third overlay (WebM or ProRes MOV) with exact name 'Dr. Lena Ortiz' and role 'VP of Engineering at Helios', teal accent, positioned lower-left, clean first/last frames. Lint and check pass.",
       "files": []
+    },
+    {
+      "id": 3,
+      "name": "multi-scene-promo-voiced",
+      "prompt": "Make a 20-second 16:9 promo for my coffee subscription brand Roast. Scenes: an opening title card with 'Roast', a word-by-word message 'Fresh roasted. / Delivered weekly. / Never stale.', a stat hit '12,000 subscribers' with the label 'BREWING SINCE 2019', and a logo close with roast.coffee. Add a voice-over reading one line per scene, and a subtle music bed under it. Vertical cut for Reels too.",
+      "expected_output": "A multi-scene HyperFrames project: a root timeline hosting four nested compositions (title card, kinetic type, stat hit, logo close) totalling ~20s, with the exact numbers/copy and the exact URL. A voice-over resolved through the first available provider (HeyGen/ElevenLabs/local) with a stated path, a music bed ducked under the voice (stated target, matched with normalize-audio), and both 16:9 and 9:16 renders. hyperframes check is clean and every asset is a frozen local file.",
+      "files": []
     }
   ]
 }
