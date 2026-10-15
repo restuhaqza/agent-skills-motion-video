@@ -1,9 +1,9 @@
 {
   "name": "promo-motion",
-  "version": "0.1.0",
-  "description": "Branded promotional motion graphics with HyperFrames: logo stings, lower thirds, title cards, stat hits, kinetic type, and transitions.",
+  "version": "0.3.0",
+  "description": "Full-stack promotional motion video with HyperFrames: logo stings, lower thirds, title cards, stat hits, kinetic type, multi-scene promos, and transparent overlays — orchestrating the HyperFrames CLI + media pipeline, generative footage, stock, voice, QA, and delivery.",
   "license": "MIT",
   "homepage": "https://hyperframes.heygen.com",
-  "keywords": ["video", "motion-graphics", "promo", "hyperframes", "agent-skill"],
+  "keywords": ["video", "motion-graphics", "promo", "hyperframes", "agent-skill", "full-stack", "video-pipeline"],
   "skills": ["./"]
 }

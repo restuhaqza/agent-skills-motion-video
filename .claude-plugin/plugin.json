@@ -1,7 +1,7 @@
 {
   "name": "promo-motion",
-  "version": "0.1.0",
-  "description": "Branded promotional motion graphics with HyperFrames: logo stings, lower thirds, title cards, stat hits, kinetic type, and transitions.",
+  "version": "0.3.0",
+  "description": "Full-stack promotional motion video with HyperFrames: logo stings, lower thirds, title cards, stat hits, kinetic type, multi-scene promos, and transparent overlays.",
   "license": "MIT",
   "skills": "./"
 }
