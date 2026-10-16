@@ -76,19 +76,19 @@
     {
       "id": 5,
       "name": "assets-ledger-deliver",
-      "prompt": "Take the Roast promo project and get it ready to ship: freeze any assets it needs into the project, run the QA gate, then produce the delivery set \u2014 an MP4 master and a transparent WebM/MOV overlay for the editor \u2014 and give me a manifest of what was produced and where it came from.",
-      "expected_output": "The project's assets are frozen local files with a provenance ledger (assets/asset-ledger.json) recording provider/model/prompt/attribution; verify.mjs runs the full gate (check + keyframes + snapshot + audio + copy fidelity); deliver.mjs produces named deliverables and writes renders/deliverables.json. Re-running the same asset request reuses the frozen file rather than regenerating.",
+      "prompt": "Build a 4-second lower third for Ana Ribeiro, Head of Coffee at Roast, and get it ready to ship. Freeze whatever assets it needs into the project, run the QA gate, then produce the delivery set: a transparent WebM and a ProRes MOV for the editor, plus a manifest of what was produced and where it came from. Brand is near-black with a warm orange accent #E4572E.",
+      "expected_output": "A transparent lower-third overlay with 'Ana Ribeiro' and 'Head of Coffee at Roast' copied verbatim and the #E4572E accent. Assets are frozen local files with a provenance ledger (assets/asset-ledger.json). verify.mjs runs the full gate. deliver.mjs produces the named deliverables and writes renders/deliverables.json; the overlay's alpha is verified by probe.",
       "files": [],
       "expectations": [
         "assets/asset-ledger.json exists and records at least one asset with provenance",
         "No paid AI-generation provider was called (local/free paths only)",
         "Re-running the same asset resolve reuses the frozen file (no duplicate ledger entry)",
-        "verify.mjs ran and its report is present",
+        "The QA gate (verify.mjs) ran",
         "renders/deliverables.json exists and lists the produced files",
-        "An opaque MP4 deliverable is produced",
-        "A transparent overlay deliverable (WebM or MOV) is produced",
-        "The overlay's alpha is verified (probe reports alpha present)",
-        "Every produced file is 1920x1080 unless a different aspect was requested"
+        "A transparent WebM deliverable is produced",
+        "A ProRes MOV deliverable is produced (outputs/ or masters/)",
+        "The overlay's alpha is verified present",
+        "The copy is verbatim: 'Ana Ribeiro' and 'Head of Coffee at Roast'"
       ]
     }
   ]
