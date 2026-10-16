@@ -135,6 +135,14 @@ Collect a compact brief. Ask only for what is missing:
 
 Restate the brief in one or two lines and get a go-ahead before writing files.
 
+**Write the copy contract first.** List every string that must appear on screen
+verbatim — names, roles, prices, numbers, URLs, taglines — exactly as the user
+wrote them, and quote them. Do not paraphrase, re-capitalise, or tidy them: a role
+that reads `VP of Engineering` when the user said `VP of Engineering at Helios` is
+a defect, not a style choice. Every on-screen string comes from that list, and the
+list goes into `BRIEF.md`. This is the single most common way a promo ships wrong,
+and it is checked mechanically at step 8.
+
 ### 2. Brand
 
 If no `brand.tokens.json` exists, create one (from a supplied kit, a website, or by
@@ -320,6 +328,14 @@ draft render and `probe.mjs`. Pass `--json` for a machine-readable verdict,
 `--strict` to fail on warnings, and `--describe` to ask a vision model about the
 frames (needs `GEMINI_API_KEY`).
 
+**Assert the copy contract.** Pass every exact string from the brief; drift then
+fails the gate instead of reaching the client:
+
+```bash
+node scripts/verify.mjs out/<project> --quality draft \
+  --expect-copy "Dr. Lena Ortiz" --expect-copy "VP of Engineering at Helios"
+```
+
 Fix everything `check` flags before a final render.
 
 ### 9. Deliver
@@ -362,7 +378,8 @@ checkerboard. Strip renderer tags when delivering:
   explained.
 - `keyframes` shows only motion you intended; snapshots at each beat look
   deliberate; first and last frames are clean.
-- The exact message/copy/number is on screen and readable at full speed.
+- The exact message/copy/number is on screen and readable at full speed, and
+  `verify.mjs --expect-copy` passes for every string in the copy contract.
 - The final render was watched, not just previewed.
 - Overlays have verified transparency.
 - Every asset is a frozen local file with recorded provenance; the provider path used

@@ -118,9 +118,14 @@ node scripts/deliver.mjs ./out/roast --preset web
 node scripts/deliver.mjs ./out/roast --preset overlay --strip-metadata
 node scripts/deliver.mjs ./out/roast --preset all --resolution landscape,4k
 
-# Full QA gate: check + keyframes + snapshot + audio + draft render + probe
+# Full QA gate: check + keyframes + snapshot + audio + copy fidelity + render
 node scripts/verify.mjs ./out/acme-sting --quality draft
+node scripts/verify.mjs ./out/acme-sting \
+  --expect-copy "Dr. Lena Ortiz" --expect-copy "VP of Engineering at Helios"
 node scripts/verify.mjs ./out/acme-sting --json     # machine-readable verdict
+
+# Inspect transparency for real (VP9/ProRes alpha is measured, not guessed)
+node scripts/probe.mjs ./out/acme-sting/renders/overlay.webm
 
 # Build a visual contact sheet from any rendered file
 node scripts/contact-sheet.mjs ./out/acme-sting/renders/*.webm --out sheet.png

@@ -142,6 +142,23 @@ Host declares a fixed window; the source file transports markup through
 Seek nested timelines independently. Do **not** add a child timeline to the parent.
 The inner timeline holds its final state if shorter than the host slot.
 
+### Nested-composition pitfalls
+
+These are the failures that actually cost time in real runs; the linter names them.
+
+- `nested_structure_needs_subcomposition` — a multi-element lockup left inside
+  `index.html` has to move into its own sub-composition. Keep the root a thin host.
+- `multiple_root_compositions` (**error**) — a project may contain several
+  composition files, but only one may be the entry `index.html`. To render a second
+  variant, pass `--composition compositions/<name>.html`; do not add a second root.
+- `data-composition-src` resolves **from the project root**, not from the file that
+  contains it. `../compositions/x.html` fails; write `compositions/x.html`.
+- **Duplicate DOM ids.** The host element's `id` and any element id inside the body
+  must differ. When they collide (a host `lower-third` wrapping
+  `<section id="lower-third">`) the document has two elements sharing one id, which
+  breaks Studio selection and every `#id` selector. The bundled scaffolders refuse
+  to emit a collision.
+
 ## Variables
 
 ```html
