@@ -152,7 +152,7 @@ function statHit(ctx) {
       <section id="stage-stat" class="clip center" data-start="0" data-duration="${D}" data-track-index="1">
         <div id="stat-content">
           <div id="label">${esc(c.label || "Faster deploys")}</div>
-          <div id="value-row"><span id="value">0</span><span id="suffix">${esc(c.suffix || "%")}</span></div>
+          <div id="value-row"><span id="value">0</span><span id="suffix">${esc(c.suffix != null ? c.suffix : "")}</span></div>
           <div id="progress"><div id="progress-fill"></div></div>
           <div id="context">${esc(c.context || "vs. last quarter")}</div>
         </div>

@@ -336,6 +336,13 @@ node scripts/verify.mjs out/<project> --quality draft \
   --expect-copy "Dr. Lena Ortiz" --expect-copy "VP of Engineering at Helios"
 ```
 
+A literal match in the source is the ideal. The gate also passes — but says so —
+when the string is only present case-insensitively (CSS `text-transform`) or
+non-literally (word-by-word animation splits the text across elements, or a
+count-up binds the number at runtime). A non-literal pass is weaker evidence:
+adding an `aria-label` with the exact string makes it literal *and* accessible,
+which is worth doing for anything a screen reader should announce.
+
 Fix everything `check` flags before a final render.
 
 ### 9. Deliver

@@ -206,17 +206,27 @@ if (!values["no-audio"]) {
 {
   const expects = values["expect-copy"] || [];
   if (expects.length) {
-    const hay = normalizeWs(unescapeHtml(readCompositionSources(dir)));
+    const raw = unescapeHtml(readCompositionSources(dir));
+    const hay = normalizeWs(raw);
     const hayCi = hay.toLowerCase();
+    const looseSrc = collapseForCompare(stripTags(raw));
     const missing = [];
     const notes = [];
     for (const s of expects) {
       const want = normalizeWs(s);
+      // 1. exact — the ideal: the string is literally in the source.
       if (hay.includes(want)) continue;
-      // Display case often comes from CSS (text-transform: uppercase), so a
-      // case-insensitive hit still means the string is present and un-reworded.
+      // 2. display case may come from CSS (text-transform: uppercase).
       if (hayCi.includes(want.toLowerCase())) {
         notes.push(`${JSON.stringify(s)}: present, case differs in source (CSS text-transform?)`);
+        continue;
+      }
+      // 3. word-by-word animation splits text across sibling elements, and
+      //    count-ups bind their number at runtime, so neither is literal. Match
+      //    with whitespace and thousands separators removed, but say so — a
+      //    loose match is weaker evidence than an exact one.
+      if (looseSrc.includes(collapseForCompare(s))) {
+        notes.push(`${JSON.stringify(s)}: present but not literal (split across elements, or bound at runtime) — add an aria-label to make it exact and accessible`);
         continue;
       }
       missing.push(s);
@@ -227,7 +237,7 @@ if (!values["no-audio"]) {
       stdout: "",
       stderr: `missing from the composition sources: ${missing.map((m) => JSON.stringify(m)).join(", ")}`,
     };
-    step(`copy fidelity (${expects.length} exact string${expects.length > 1 ? "s" : ""})`, res);
+    step(`copy fidelity (${expects.length} string${expects.length > 1 ? "s" : ""})`, res);
     for (const n of notes) say(`  · ${n}`);
     report.copy = { expected: expects, missing, notes };
   }
@@ -291,6 +301,21 @@ function unescapeHtml(s) {
 
 function normalizeWs(s) {
   return String(s).replace(/\s+/g, " ").trim();
+}
+
+// Aggressive comparison for copy that cannot be literal in source: whitespace
+// disappears when word-by-word animation splits text into sibling elements, and
+// thousands separators disappear when a count-up formats its value at runtime.
+// Tags are dropped first, or `</span><span>` would still separate the words.
+function collapseForCompare(s) {
+  return String(s)
+    .toLowerCase()
+    .replace(/(?<=\d),(?=\d)/g, "")
+    .replace(/\s+/g, "");
+}
+
+function stripTags(html) {
+  return String(html).replace(/<[^>]*>/g, " ");
 }
 
 function projectHasAudio(root) {
