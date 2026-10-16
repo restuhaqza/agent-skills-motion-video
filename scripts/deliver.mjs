@@ -14,7 +14,7 @@
 import { parseArgs } from "node:util";
 import { existsSync, readFileSync, mkdirSync, writeFileSync, statSync, renameSync } from "node:fs";
 import { resolve, join, basename, extname } from "node:path";
-import { run, ASPECTS, log, die } from "./lib/common.mjs";
+import { run, ASPECTS, log, die, normalizeArgv } from "./lib/common.mjs";
 
 const USAGE = `promo-motion deliver
 
@@ -65,8 +65,12 @@ const options = {
 
 let values, positionals;
 try {
-  ({ values, positionals } = parseArgs({ options, allowPositionals: true }));
-} catch { console.error(USAGE); process.exit(2); }
+  ({ values, positionals } = parseArgs({ options, args: normalizeArgv(process.argv.slice(2), options), allowPositionals: true }));
+} catch (e) {
+  console.error("promo-motion: " + e.message + "\n");
+  console.error(USAGE);
+  process.exit(2);
+}
 if (values.help) { console.log(USAGE); process.exit(0); }
 const say = (...a) => { if (!values.json) log(...a); };
 
@@ -119,6 +123,15 @@ const quality = values.quality || "high";
 const outDir = resolve(values["out-dir"] || join(dir, "renders"));
 mkdirSync(outDir, { recursive: true });
 const name = basename(dir);
+
+// A transparent deliverable can only be transparent if the composition left the
+// background unpainted. Warn instead of silently handing back an opaque "overlay".
+const paintsBackground = !/background:\s*transparent/.test(html);
+const wantsAlpha = formats.some((fm) => fm === "webm" || fm === "mov");
+if (paintsBackground && wantsAlpha) {
+  say(`note: this composition paints its background, so the WebM/MOV output will be opaque.\n` +
+      `      For a real overlay, author it with the background unpainted (see references/hyperframes-contract.md).`);
+}
 
 const jobs = [];
 for (const fmt of formats) for (const res of resolutions) {

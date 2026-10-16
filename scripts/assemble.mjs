@@ -13,8 +13,8 @@
 import { parseArgs } from "node:util";
 import { writeFileSync, mkdirSync, readFileSync, existsSync, copyFileSync } from "node:fs";
 import { resolve, join, dirname } from "node:path";
-import { DEFAULTS, ASPECTS, brandCssVars, f, log, die } from "./lib/common.mjs";
-import { ARCHETYPES, esc, buildArchetype, compositionHtml, rootHtml } from "./lib/archetypes.mjs";
+import { DEFAULTS, ASPECTS, brandCssVars, f, log, die, normalizeArgv } from "./lib/common.mjs";
+import { ARCHETYPES, esc, buildArchetype, compositionHtml, rootHtml, idCollisions } from "./lib/archetypes.mjs";
 
 const USAGE = `promo-motion assemble
 
@@ -62,8 +62,9 @@ const options = {
 
 let values;
 try {
-  ({ values } = parseArgs({ options, allowPositionals: false }));
-} catch {
+  ({ values } = parseArgs({ options, args: normalizeArgv(process.argv.slice(2), options), allowPositionals: false }));
+} catch (e) {
+  console.error("promo-motion: " + e.message + "\n");
   console.error(USAGE);
   process.exit(2);
 }
@@ -130,6 +131,10 @@ for (const s of sb.scenes) {
     duration: s.duration != null ? Number(s.duration) : undefined,
   };
   const spec = buildArchetype(s.archetype, { ...ctx, content: s });
+  const collisions = idCollisions(s.id, spec);
+  if (collisions.length) {
+    die(`${s.id}: archetype "${s.archetype}" reuses the host id inside its own body — rename the scene id or the inner element`);
+  }
   timeline.push({ ...s, start, end: f(start + spec.duration), duration: spec.duration, spec });
   cursor = Math.max(cursor, start + spec.duration);
 }

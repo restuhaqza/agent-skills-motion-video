@@ -93,3 +93,28 @@ export function readDurationFromHtml(fileText, fallback = 3) {
   const m = fileText.match(/data-duration="([0-9.]+)"/);
   return m ? Number(m[1]) : fallback;
 }
+
+// Node's parseArgs rejects a *value* that starts with a dash ("Option '--tracking'
+// argument is ambiguous"). Agents trip on this constantly with values like
+// `--tracking -0.02em` or `--gain -3`. Rewrite those to the `--flag=value` form
+// that parseArgs does accept, so the natural spelling just works.
+//
+// A token that starts with a dash is treated as a value only when it is NOT a
+// plausible option name (e.g. `-0.02em`, `-1.5`): single dash plus a digit/sign.
+export function normalizeArgv(argv, options = {}) {
+  const out = [];
+  for (let i = 0; i < argv.length; i++) {
+    const a = argv[i];
+    const m = /^--([^=]+)$/.exec(a);
+    if (m && options[m[1]]?.type === "string" && i + 1 < argv.length) {
+      const next = argv[i + 1];
+      if (/^-(?![A-Za-z-])/.test(next)) {
+        out.push(`${a}=${next}`);
+        i++;
+        continue;
+      }
+    }
+    out.push(a);
+  }
+  return out;
+}

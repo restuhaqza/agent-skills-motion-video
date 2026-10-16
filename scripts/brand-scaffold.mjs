@@ -2,7 +2,7 @@
 import { parseArgs } from "node:util";
 import { writeFileSync, mkdirSync } from "node:fs";
 import { dirname, resolve } from "node:path";
-import { DEFAULTS, stripUndefined, log } from "./lib/common.mjs";
+import { DEFAULTS, stripUndefined, log, normalizeArgv } from "./lib/common.mjs";
 
 const USAGE = `promo-motion brand-scaffold
 
@@ -51,8 +51,9 @@ const opts = {
 
 let values;
 try {
-  ({ values } = parseArgs({ options: opts, allowPositionals: true }));
+  ({ values } = parseArgs({ options: opts, args: normalizeArgv(process.argv.slice(2), opts), allowPositionals: true }));
 } catch (e) {
+  console.error("promo-motion: " + e.message + "\n");
   console.error(USAGE);
   process.exit(2);
 }

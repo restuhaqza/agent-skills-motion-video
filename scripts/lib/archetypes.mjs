@@ -43,7 +43,7 @@ function logoSting(ctx) {
     #underline { position: absolute; left: 0; bottom: -18px; height: 6px; width: 100%;
       background: var(--primary); transform-origin: left center; }`,
     body: `
-      <section id="sting" class="clip center" data-start="0" data-duration="${D}" data-track-index="1">
+      <section id="stage-sting" class="clip center" data-start="0" data-duration="${D}" data-track-index="1">
         <div id="lockup">
           <div id="mark-wrap"><img id="mark" src="${logoRel}" alt="${logoAlt}" /></div>
           <div id="wm-wrap"><div id="wordmark">${word}</div><div id="underline"></div></div>
@@ -72,7 +72,7 @@ function lowerThird(ctx) {
     #role { font-family: var(--font-body); font-weight: 500; font-size: 30px;
       color: var(--muted); margin-top: 6px; }`,
     body: `
-      <section id="lower-third" class="clip" data-start="0" data-duration="${D}" data-track-index="1">
+      <section id="lt-stage" class="clip" data-start="0" data-duration="${D}" data-track-index="1">
         <div id="lt-anchor">
           <div id="accent"></div>
           <div id="plate">
@@ -110,7 +110,7 @@ function titleCard(ctx) {
     #support { font-family: var(--font-body); font-size: 38px; color: var(--muted);
       margin: 22px 0 0; max-width: 1040px; line-height: 1.3; }`,
     body: `
-      <section id="card" class="clip" data-start="0" data-duration="${D}" data-track-index="1">
+      <section id="stage-card" class="clip" data-start="0" data-duration="${D}" data-track-index="1">
         <div id="ground"></div>
         <div id="content">
           <div id="eyebrow">${esc(c.eyebrow || "Introducing")}</div>
@@ -124,7 +124,7 @@ function titleCard(ctx) {
       tl.fromTo("#title", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: ${U(0.6)}, ease: "power3.out" }, ${T(0.45)});
       tl.fromTo("#support", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: ${U(0.45)}, ease: "power3.out" }, ${T(0.85)});
       tl.to("#content", { scale: 1.008, duration: ${U(2.1)}, ease: "sine.inOut" }, ${T(1.25)});
-      tl.to("#card", { opacity: 0, duration: ${U(0.3)}, ease: "power2.in" }, ${exit});`,
+      tl.to("#stage-card", { opacity: 0, duration: ${U(0.3)}, ease: "power2.in" }, ${exit});`,
   };
 }
 
@@ -149,7 +149,7 @@ function statHit(ctx) {
       transform-origin: left center; }
     #context { font-family: var(--font-body); font-size: 30px; line-height: 1; color: var(--muted); }`,
     body: `
-      <section id="stat" class="clip center" data-start="0" data-duration="${D}" data-track-index="1">
+      <section id="stage-stat" class="clip center" data-start="0" data-duration="${D}" data-track-index="1">
         <div id="stat-content">
           <div id="label">${esc(c.label || "Faster deploys")}</div>
           <div id="value-row"><span id="value">0</span><span id="suffix">${esc(c.suffix || "%")}</span></div>
@@ -166,7 +166,7 @@ function statHit(ctx) {
       tl.fromTo("#progress-fill", { scaleX: 0 }, { scaleX: 1, duration: ${U(1.1)}, ease: "power2.out" }, ${T(0.3)});
       tl.fromTo("#suffix", { opacity: 0 }, { opacity: 1, duration: ${U(0.25)}, ease: "power2.out" }, ${T(1.35)});
       tl.fromTo("#context", { y: 14, opacity: 0 }, { y: 0, opacity: 1, duration: ${U(0.4)}, ease: "power3.out" }, ${T(1.55)});
-      tl.to("#stat", { opacity: 0, duration: ${U(0.3)}, ease: "power2.in" }, ${exit});`,
+      tl.to("#stage-stat", { opacity: 0, duration: ${U(0.3)}, ease: "power2.in" }, ${exit});`,
   };
 }
 
@@ -182,7 +182,7 @@ function kineticType(ctx) {
       font-size: 104px; letter-spacing: var(--tracking); line-height: 1.02; }
     #accent-word { color: var(--primary); display: inline-block; }`,
     body: `
-      <section id="kinetic" class="clip center" data-start="0" data-duration="${D}" data-track-index="1">
+      <section id="stage-kinetic" class="clip center" data-start="0" data-duration="${D}" data-track-index="1">
         <div id="phrase">
           <div id="l1" class="line">${esc(c.l1 || "Ship")}</div>
           <div id="l2" class="line">${esc(c.l2 || "motion")} <span id="accent-word">${esc(c["accent-word"] || c.accentWord || "faster")}</span></div>
@@ -197,7 +197,7 @@ function kineticType(ctx) {
       tl.to("#accent-word", { scale: 1, duration: ${U(0.25)}, ease: "power2.out" }, ${T(1.32)});
       tl.fromTo("#l3", { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: ${U(0.5)}, ease: "power3.out" }, ${T(1.6)});
       tl.to("#phrase", { scale: 1.006, duration: ${U(2.2)}, ease: "sine.inOut" }, ${T(2.1)});
-      tl.to("#kinetic", { opacity: 0, duration: ${U(0.4)}, ease: "power2.in" }, ${exit});`,
+      tl.to("#stage-kinetic", { opacity: 0, duration: ${U(0.4)}, ease: "power2.in" }, ${exit});`,
   };
 }
 
@@ -230,7 +230,7 @@ export function buildTransition(name, ctx) {
       tl.fromTo("#band", { xPercent: -120 }, { xPercent: 0, duration: ${U(0.28)}, ease: "power3.in" }, 0);
       tl.to("#band", { xPercent: 120, duration: ${U(0.3)}, ease: "power3.out" }, ${U(0.3)});`;
   }
-  return { overlay: true, duration: D, style, body: `\n      <section id="tr" class="clip" data-start="0" data-duration="${D}" data-track-index="0">${band}</section>`, script };
+  return { overlay: true, duration: D, style, body: `\n      <section id="stage-tr" class="clip" data-start="0" data-duration="${D}" data-track-index="0">${band}</section>`, script };
 }
 
 export function buildArchetype(archetype, ctx) {
@@ -242,6 +242,17 @@ export function buildArchetype(archetype, ctx) {
     case "kinetic-type": return kineticType(ctx);
     default: throw new Error(`unknown archetype: ${archetype}`);
   }
+}
+
+/**
+ * The composition *host* id must differ from any element id inside the body.
+ * When they collide (e.g. host `lower-third` hosting `<section id="lower-third">`)
+ * the document gets two elements with the same id, which confuses Studio
+ * selection and any `#id` selector. Returns the colliding ids, if any.
+ */
+export function idCollisions(compId, spec) {
+  const ids = [...String(spec.body).matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]);
+  return ids.filter((id) => id === compId);
 }
 
 // ---- HTML shells ----------------------------------------------------------

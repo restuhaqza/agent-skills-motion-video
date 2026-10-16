@@ -21,7 +21,7 @@ import { parseArgs } from "node:util";
 import { createHash } from "node:crypto";
 import { mkdirSync, existsSync, readFileSync, writeFileSync, copyFileSync, statSync } from "node:fs";
 import { resolve, dirname, join, relative, basename } from "node:path";
-import { run, f, log, die } from "./lib/common.mjs";
+import { run, f, log, die, normalizeArgv } from "./lib/common.mjs";
 import {
   providerStatus, replicateRun, replicateToken, firstUrl, download,
   elevenlabsTts, pexelsVideo, pexelsPhoto, probeDuration,
@@ -79,8 +79,9 @@ const options = {
 
 let values, positionals;
 try {
-  ({ values, positionals } = parseArgs({ options, allowPositionals: true }));
-} catch {
+  ({ values, positionals } = parseArgs({ options, args: normalizeArgv(process.argv.slice(2), options), allowPositionals: true }));
+} catch (e) {
+  console.error("promo-motion: " + e.message + "\n");
   console.error(USAGE);
   process.exit(2);
 }

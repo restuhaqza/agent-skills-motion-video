@@ -10,7 +10,8 @@
 //   3. hyperframes inspect    overflow pass (opt-in; deprecated in favour of check)
 //   4. hyperframes snapshot   beat frames + contact sheet (optionally VLM-described)
 //   5. hyperframes audio      where sound lands: onsets, loudness, silence (if audio)
-//   6. hyperframes render     draft render (optional) + probe.mjs on the output
+//   6. copy fidelity          every exact string from the brief, checked in source
+//   7. hyperframes render     draft render (optional) + probe.mjs on the output
 //
 // Usage:
 //   node scripts/verify.mjs <project-dir> [--quality draft] [--format mp4]
@@ -19,7 +20,7 @@
 import { parseArgs } from "node:util";
 import { existsSync, readFileSync, mkdirSync, readdirSync } from "node:fs";
 import { resolve, join } from "node:path";
-import { run, f, log, die, readDurationFromHtml } from "./lib/common.mjs";
+import { run, f, log, die, readDurationFromHtml, normalizeArgv } from "./lib/common.mjs";
 
 const USAGE = `promo-motion verify
 
@@ -38,6 +39,9 @@ Flags:
   --fps <n>               override render frame rate
   --out <path>            render output (default <dir>/renders/verify.<ext>)
   --describe [question]   ask Gemini vision about the snapshots (needs GEMINI_API_KEY)
+  --expect-copy <string>  assert this exact string appears in the composition
+                          sources; repeatable. Use it for every name, role,
+                          price, and number taken verbatim from the user.
   --strict                fail on warnings, not just errors
   --json                  print only the JSON verdict
   --inspect               also run the deprecated 'hyperframes inspect' overflow pass
@@ -53,6 +57,7 @@ const options = {
   times: { type: "string" }, frames: { type: "string" },
   format: { type: "string" }, quality: { type: "string" }, fps: { type: "string" },
   out: { type: "string" }, describe: { type: "string" },
+  "expect-copy": { type: "string", multiple: true },
   strict: { type: "boolean" }, json: { type: "boolean" }, inspect: { type: "boolean" },
   "no-check": { type: "boolean" }, "no-keyframes": { type: "boolean" },
   "no-snapshot": { type: "boolean" },
@@ -62,8 +67,9 @@ const options = {
 
 let values, positionals;
 try {
-  ({ values, positionals } = parseArgs({ options, allowPositionals: true }));
-} catch {
+  ({ values, positionals } = parseArgs({ options, args: normalizeArgv(process.argv.slice(2), options), allowPositionals: true }));
+} catch (e) {
+  console.error("promo-motion: " + e.message + "\n");
   console.error(USAGE);
   process.exit(2);
 }
@@ -193,7 +199,41 @@ if (!values["no-audio"]) {
   }
 }
 
-// ---- 6. render draft + probe ----------------------------------------------
+// ---- 6. copy fidelity ------------------------------------------------------
+// The most damaging promo error is a dropped or reworded exact string: a name,
+// a role, a price, a number. Model output drifts there, so check it mechanically
+// against the composition sources rather than trusting the author to be careful.
+{
+  const expects = values["expect-copy"] || [];
+  if (expects.length) {
+    const hay = normalizeWs(unescapeHtml(readCompositionSources(dir)));
+    const hayCi = hay.toLowerCase();
+    const missing = [];
+    const notes = [];
+    for (const s of expects) {
+      const want = normalizeWs(s);
+      if (hay.includes(want)) continue;
+      // Display case often comes from CSS (text-transform: uppercase), so a
+      // case-insensitive hit still means the string is present and un-reworded.
+      if (hayCi.includes(want.toLowerCase())) {
+        notes.push(`${JSON.stringify(s)}: present, case differs in source (CSS text-transform?)`);
+        continue;
+      }
+      missing.push(s);
+    }
+    const res = {
+      ok: missing.length === 0,
+      status: missing.length ? 1 : 0,
+      stdout: "",
+      stderr: `missing from the composition sources: ${missing.map((m) => JSON.stringify(m)).join(", ")}`,
+    };
+    step(`copy fidelity (${expects.length} exact string${expects.length > 1 ? "s" : ""})`, res);
+    for (const n of notes) say(`  · ${n}`);
+    report.copy = { expected: expects, missing, notes };
+  }
+}
+
+// ---- 7. render draft + probe ----------------------------------------------
 if (!values["no-render"]) {
   const fmt = values.format || "mp4";
   const quality = values.quality || "draft";
@@ -221,6 +261,38 @@ if (values.json) {
 process.exit(report.ok ? 0 : 1);
 
 // ---- helpers --------------------------------------------------------------
+function readCompositionSources(root) {
+  const SKIP = ["node_modules", ".hyperframes", "renders", "masters", "assets"];
+  let text = "";
+  const walk = (d, depth) => {
+    if (depth > 3) return;
+    let entries = [];
+    try { entries = readdirSync(d, { withFileTypes: true }); } catch { return; }
+    for (const e of entries) {
+      if (SKIP.includes(e.name)) continue;
+      const p = join(d, e.name);
+      if (e.isDirectory()) { walk(p, depth + 1); continue; }
+      if (/\.html$/i.test(e.name)) {
+        try { text += readFileSync(p, "utf8") + "\n"; } catch { /* ignore */ }
+      }
+    }
+  };
+  walk(root, 0);
+  return text;
+}
+
+// Function declarations (not const arrows) so they are hoisted: the copy-fidelity
+// block above runs before this section is reached.
+function unescapeHtml(s) {
+  return String(s)
+    .replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"').replace(/&#39;/g, "'");
+}
+
+function normalizeWs(s) {
+  return String(s).replace(/\s+/g, " ").trim();
+}
+
 function projectHasAudio(root) {
   const scan = (d, depth) => {
     if (depth > 2) return false;
