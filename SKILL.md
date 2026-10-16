@@ -343,6 +343,18 @@ count-up binds the number at runtime). A non-literal pass is weaker evidence:
 adding an `aria-label` with the exact string makes it literal *and* accessible,
 which is worth doing for anything a screen reader should announce.
 
+When the piece has more than a couple of strings, write the contract as a file
+and pass it instead. The contract claims to be *complete*, so the gate also runs
+the other way and fails on copy that is on screen but not approved:
+
+```bash
+# copy.json — a JSON array, or one string per line
+node scripts/verify.mjs out/<project> --copy-contract copy.json
+```
+
+This is how a placeholder that reads like a fact gets caught: archetype defaults
+never invent copy, but a hand-authored eyebrow or a leftover label can.
+
 Fix everything `check` flags before a final render.
 
 ### 9. Deliver

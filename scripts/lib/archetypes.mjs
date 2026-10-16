@@ -30,7 +30,7 @@ export const esc = (s) =>
 function logoSting(ctx) {
   const { content: c, brandName, logoRel, logoAlt } = ctx;
   const D = Number(ctx.duration || 3), k = D / 3, T = (t) => f(t * k), U = (d) => f(d * k);
-  const word = esc(c.title || brandName);
+  const word = esc(c.title ?? brandName);
   const exit = f(Math.max(1.0, D - 0.35));
   return {
     overlay: !!ctx.overlay, duration: D,
@@ -76,8 +76,8 @@ function lowerThird(ctx) {
         <div id="lt-anchor">
           <div id="accent"></div>
           <div id="plate">
-            <div id="name">${esc(c.name || "Jane Doe")}</div>
-            <div id="role">${esc(c.role || "Founder, " + brandName)}</div>
+            <div id="name">${esc(c.name ?? "")}</div>
+            <div id="role">${esc(c.role ?? "")}</div>
           </div>
         </div>
       </section>`,
@@ -113,9 +113,9 @@ function titleCard(ctx) {
       <section id="stage-card" class="clip" data-start="0" data-duration="${D}" data-track-index="1">
         <div id="ground"></div>
         <div id="content">
-          <div id="eyebrow">${esc(c.eyebrow || "Introducing")}</div>
-          <h1 id="title">${esc(c.title || brandName)}</h1>
-          <p id="support">${esc(c.message || c.subtitle || "Motion that ships on brand.")}</p>
+          <div id="eyebrow">${esc(c.eyebrow ?? "")}</div>
+          <h1 id="title">${esc(c.title ?? brandName)}</h1>
+          <p id="support">${esc(c.message ?? c.subtitle ?? "")}</p>
         </div>
       </section>`,
     script: `
@@ -151,10 +151,10 @@ function statHit(ctx) {
     body: `
       <section id="stage-stat" class="clip center" data-start="0" data-duration="${D}" data-track-index="1">
         <div id="stat-content">
-          <div id="label">${esc(c.label || "Faster deploys")}</div>
+          <div id="label">${esc(c.label ?? "")}</div>
           <div id="value-row"><span id="value">0</span><span id="suffix">${esc(c.suffix != null ? c.suffix : "")}</span></div>
           <div id="progress"><div id="progress-fill"></div></div>
-          <div id="context">${esc(c.context || "vs. last quarter")}</div>
+          <div id="context">${esc(c.context ?? "")}</div>
         </div>
       </section>`,
     script: `
@@ -184,9 +184,9 @@ function kineticType(ctx) {
     body: `
       <section id="stage-kinetic" class="clip center" data-start="0" data-duration="${D}" data-track-index="1">
         <div id="phrase">
-          <div id="l1" class="line">${esc(c.l1 || "Ship")}</div>
-          <div id="l2" class="line">${esc(c.l2 || "motion")} <span id="accent-word">${esc(c["accent-word"] || c.accentWord || "faster")}</span></div>
-          <div id="l3" class="line">${esc(c.l3 || "than your team can brief.")}</div>
+          <div id="l1" class="line">${esc(c.l1 ?? "")}</div>
+          <div id="l2" class="line">${esc(c.l2 ?? "")} <span id="accent-word">${esc(c["accent-word"] ?? c.accentWord ?? "")}</span></div>
+          <div id="l3" class="line">${esc(c.l3 ?? "")}</div>
         </div>
       </section>`,
     script: `

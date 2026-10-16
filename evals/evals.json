@@ -17,7 +17,11 @@
         "The render is 1920x1080",
         "The overlay carries a real alpha channel",
         "hyperframes lint reports 0 errors",
-        "hyperframes check is clean"
+        "hyperframes check is clean",
+        "No CLI argument-parsing workaround was needed",
+        "Transparency was verified with the skill's own probe (no hand-written alpha script)",
+        "No asset metadata had to be written by hand",
+        "No copy on screen outside the brief"
       ]
     },
     {
@@ -43,7 +47,11 @@
         "The overlay carries a real alpha channel",
         "The clip ends with the overlay fully off screen",
         "hyperframes lint reports 0 errors",
-        "hyperframes check is clean"
+        "hyperframes check is clean",
+        "No CLI argument-parsing workaround was needed",
+        "Transparency was verified with the skill's own probe (no hand-written alpha script)",
+        "No asset metadata had to be written by hand",
+        "No copy on screen outside the brief"
       ]
     },
     {
@@ -70,7 +78,11 @@
         "'roast.coffee' appears verbatim",
         "A 16:9 project renders successfully",
         "A 9:16 project is re-authored (1080x1920), not stretched from 16:9",
-        "hyperframes check is clean on the 16:9 project"
+        "hyperframes check is clean on the 16:9 project",
+        "No CLI argument-parsing workaround was needed",
+        "Transparency was verified with the skill's own probe (no hand-written alpha script)",
+        "No asset metadata had to be written by hand",
+        "No copy on screen outside the brief"
       ]
     },
     {
@@ -88,8 +100,13 @@
         "A transparent WebM deliverable is produced",
         "A ProRes MOV deliverable is produced (outputs/ or masters/)",
         "The overlay's alpha is verified present",
-        "The copy is verbatim: 'Ana Ribeiro' and 'Head of Coffee at Roast'"
+        "The copy is verbatim: 'Ana Ribeiro' and 'Head of Coffee at Roast'",
+        "No CLI argument-parsing workaround was needed",
+        "Transparency was verified with the skill's own probe (no hand-written alpha script)",
+        "No asset metadata had to be written by hand",
+        "No copy on screen outside the brief"
       ]
     }
-  ]
+  ],
+  "assertion_notes": "Process assertions. For quality/infrastructure work the pass rate barely moves; what moves is how much the agent had to fight the tooling. Graded from transcript.md and the run's files, so they are heuristics, not proofs."
 }

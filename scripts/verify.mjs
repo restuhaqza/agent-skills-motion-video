@@ -42,6 +42,10 @@ Flags:
   --expect-copy <string>  assert this exact string appears in the composition
                           sources; repeatable. Use it for every name, role,
                           price, and number taken verbatim from the user.
+  --copy-contract <file>  a JSON array (or newline-delimited) list of every
+                          approved on-screen string. Implies --expect-copy for
+                          each, and additionally fails if the compositions show
+                          copy that is not in the list (copy purity).
   --strict                fail on warnings, not just errors
   --json                  print only the JSON verdict
   --inspect               also run the deprecated 'hyperframes inspect' overflow pass
@@ -58,6 +62,7 @@ const options = {
   format: { type: "string" }, quality: { type: "string" }, fps: { type: "string" },
   out: { type: "string" }, describe: { type: "string" },
   "expect-copy": { type: "string", multiple: true },
+  "copy-contract": { type: "string" },
   strict: { type: "boolean" }, json: { type: "boolean" }, inspect: { type: "boolean" },
   "no-check": { type: "boolean" }, "no-keyframes": { type: "boolean" },
   "no-snapshot": { type: "boolean" },
@@ -199,12 +204,17 @@ if (!values["no-audio"]) {
   }
 }
 
-// ---- 6. copy fidelity ------------------------------------------------------
-// The most damaging promo error is a dropped or reworded exact string: a name,
-// a role, a price, a number. Model output drifts there, so check it mechanically
+// ---- 6. copy contract ------------------------------------------------------
+// The most damaging promo error is a dropped or reworded exact string: a name, a
+// role, a price, a number. Model output drifts there, so check it mechanically
 // against the composition sources rather than trusting the author to be careful.
+//
+// With --copy-contract the check runs both ways: everything in the contract must
+// be on screen, and nothing on screen may be outside the contract.
 {
-  const expects = values["expect-copy"] || [];
+  const contractPath = values["copy-contract"];
+  const contract = contractPath ? readCopyContract(contractPath) : [];
+  const expects = [...(values["expect-copy"] || []), ...contract];
   if (expects.length) {
     const raw = unescapeHtml(readCompositionSources(dir));
     const hay = normalizeWs(raw);
@@ -223,7 +233,7 @@ if (!values["no-audio"]) {
       }
       // 3. word-by-word animation splits text across sibling elements, and
       //    count-ups bind their number at runtime, so neither is literal. Match
-      //    with whitespace and thousands separators removed, but say so — a
+      //    with tags, whitespace and thousands separators removed, but say so — a
       //    loose match is weaker evidence than an exact one.
       if (looseSrc.includes(collapseForCompare(s))) {
         notes.push(`${JSON.stringify(s)}: present but not literal (split across elements, or bound at runtime) — add an aria-label to make it exact and accessible`);
@@ -231,15 +241,21 @@ if (!values["no-audio"]) {
       }
       missing.push(s);
     }
+
+    const uncovered = contractPath ? uncoveredStrings(raw, expects) : [];
     const res = {
-      ok: missing.length === 0,
-      status: missing.length ? 1 : 0,
+      ok: missing.length === 0 && uncovered.length === 0,
+      status: missing.length || uncovered.length ? 1 : 0,
       stdout: "",
-      stderr: `missing from the composition sources: ${missing.map((m) => JSON.stringify(m)).join(", ")}`,
+      stderr: [
+        missing.length ? `missing from the composition sources: ${missing.map((m) => JSON.stringify(m)).join(", ")}` : "",
+        uncovered.length ? `on screen but not in the copy contract: ${uncovered.map((u) => JSON.stringify(u)).join(", ")}` : "",
+      ].filter(Boolean).join("\n"),
     };
-    step(`copy fidelity (${expects.length} string${expects.length > 1 ? "s" : ""})`, res);
+    step(`copy ${contractPath ? "contract" : "fidelity"} (${expects.length} string${expects.length > 1 ? "s" : ""})`, res);
     for (const n of notes) say(`  · ${n}`);
-    report.copy = { expected: expects, missing, notes };
+    if (uncovered.length) say(`  · on screen but not in the contract: ${uncovered.map((u) => JSON.stringify(u)).join(", ")}`);
+    report.copy = { expected: expects, missing, notes, uncovered };
   }
 }
 
@@ -316,6 +332,43 @@ function collapseForCompare(s) {
 
 function stripTags(html) {
   return String(html).replace(/<[^>]*>/g, " ");
+}
+
+/** A copy contract is a JSON array of strings, or one string per line (# = comment). */
+function readCopyContract(path) {
+  const p = resolve(path);
+  if (!existsSync(p)) die(`copy contract not found: ${p}`);
+  const text = readFileSync(p, "utf8").trim();
+  if (text.startsWith("[")) {
+    try {
+      const arr = JSON.parse(text);
+      if (Array.isArray(arr)) return arr.map(String).map((s) => s.trim()).filter(Boolean);
+    } catch { /* fall through to line mode */ }
+  }
+  return text.split("\n").map((l) => l.trim()).filter((l) => l && !l.startsWith("#"));
+}
+
+/** Human-visible text in a composition: tags, scripts and styles removed. */
+function visibleStrings(html) {
+  const cleaned = String(html)
+    .replace(/<script[\s\S]*?<\/script>/gi, "\n")
+    .replace(/<style[\s\S]*?<\/style>/gi, "\n")
+    .replace(/<[^>]*>/g, "\n");
+  const seen = new Set();
+  for (const line of cleaned.split("\n")) {
+    const t = normalizeWs(unescapeHtml(line));
+    if (t.length < 3 || !/[A-Za-z]/.test(t)) continue;
+    seen.add(t);
+  }
+  return [...seen];
+}
+
+/** Visible strings not covered by (contained in, or containing) an approved one. */
+function uncoveredStrings(html, contract) {
+  const norm = (s) => normalizeWs(s).toLowerCase();
+  const approved = contract.map(norm).filter(Boolean);
+  const covered = (v) => approved.some((a) => a.includes(v) || v.includes(a));
+  return visibleStrings(html).filter((v) => !covered(norm(v))).slice(0, 25);
 }
 
 function projectHasAudio(root) {
